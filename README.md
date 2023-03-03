@@ -1,6 +1,6 @@
 # Programming vacancies parser
 
-This is tool for fetching developers salary stats depends on programming languages in Moscow. Script uses [api.hh.ru](https://api.hh.ru/) and [api.superjob.ru](https://api.superjob.ru/) as sources for collect data. Results shown in a table in the terminal.
+This is tool for fetching developers salary stats depends on programming languages in Moscow. Script uses [api.hh.ru](https://api.hh.ru/) and [api.superjob.ru](https://api.superjob.ru/) as sources for collect data. Results shown in a table in the terminal. Statistics are collected for the next languages: `JavaScript`, `Java`, `Python`, `Ruby`, `PHP`, `C++`, `C#`, `Go`, `Scala`, `Swift`.
 
 ## Requirements
 
