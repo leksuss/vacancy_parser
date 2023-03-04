@@ -4,6 +4,11 @@ from environs import Env
 from terminaltables import AsciiTable
 
 
+HH_VACANCIES_AGE_IN_DAYS = 30
+RESULTS_PER_PAGE = 100
+SJ_PROF_DEPARTMENT_ID = 48
+
+
 def predict_rub_salary(salary_from, salary_to):
 
     if salary_from and salary_to:
@@ -35,6 +40,7 @@ def get_salary_stat(vacancies, predict_rub_salary_func):
 
 
 def fetch_city_id_sj(city):
+
     url = 'https://api.superjob.ru/2.0/towns/'
 
     params = {
@@ -61,8 +67,8 @@ def fetch_vacancies_sj(prog_lang, city_id, sj_secret_key):
     params = {
         'keyword': prog_lang,
         'town': city_id,
-        'catalogues': 48,
-        'count': 5,
+        'catalogues': SJ_PROF_DEPARTMENT_ID,
+        'count': RESULTS_PER_PAGE,
         'page': 0,
     }
 
@@ -153,13 +159,12 @@ def fetch_vacancies_hh(prog_lang, prof_role_id, city_id):
     params = {
         'professional_role': prof_role_id,
         'area': city_id,
-        'period': 30,
+        'period': HH_VACANCIES_AGE_IN_DAYS,
         'order_by': 'publication_time',
         'search_field': 'name',
         'text': prog_lang,
         'page': 0,
-        'per_page': 100,
-        # 'only_with_salary': True,
+        'per_page': RESULTS_PER_PAGE,
     }
     vacancies = []
     pages = 1
