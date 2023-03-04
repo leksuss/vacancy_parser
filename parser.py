@@ -52,7 +52,7 @@ def fetch_city_id_sj(city):
     return None
 
 
-def fetch_vacancies_sj(prog_lang, city, sj_secret_key):
+def fetch_vacancies_sj(prog_lang, city_id, sj_secret_key):
 
     url = 'https://api.superjob.ru/2.0/vacancies/'
     headers = {
@@ -60,7 +60,7 @@ def fetch_vacancies_sj(prog_lang, city, sj_secret_key):
     }
     params = {
         'keyword': prog_lang,
-        'town': fetch_city_id_sj(city),
+        'town': city_id,
         'catalogues': 48,
         'count': 5,
         'page': 0,
@@ -91,11 +91,11 @@ def predict_rub_salary_sj(vacancy):
     return None
 
 
-def get_salary_stat_sj(prog_langs, city, sj_secret_key):
+def get_salary_stat_sj(prog_langs, city_id, sj_secret_key):
 
     salaries_stat = {}
     for prog_lang in prog_langs:
-        vacancies = fetch_vacancies_sj(prog_lang, city, sj_secret_key)
+        vacancies = fetch_vacancies_sj(prog_lang, city_id, sj_secret_key)
         salary_stat = get_salary_stat(vacancies, predict_rub_salary_sj)
         salaries_stat[prog_lang] = salary_stat
 
@@ -147,12 +147,12 @@ def fetch_prof_role_id_hh(prof_role):
     return None
 
 
-def fetch_vacancies_hh(prog_lang, prof_role, city):
+def fetch_vacancies_hh(prog_lang, prof_role_id, city_id):
 
     url = 'https://api.hh.ru/vacancies'
     params = {
-        'professional_role': fetch_prof_role_id_hh(prof_role),
-        'area': fetch_city_id_hh(city),
+        'professional_role': prof_role_id,
+        'area': city_id,
         'period': 30,
         'order_by': 'publication_time',
         'search_field': 'name',
@@ -174,11 +174,11 @@ def fetch_vacancies_hh(prog_lang, prof_role, city):
     return vacancies
 
 
-def get_salary_stat_hh(prog_langs, prof_role, city):
+def get_salary_stat_hh(prog_langs, prof_role_id, city_id):
 
     salaries_stat = {}
     for prog_lang in prog_langs:
-        vacancies = fetch_vacancies_hh(prog_lang, prof_role, city)
+        vacancies = fetch_vacancies_hh(prog_lang, prof_role_id, city_id)
         salary_stat = get_salary_stat(vacancies, predict_rub_salary_hh)
         salaries_stat[prog_lang] = salary_stat
 
@@ -223,17 +223,20 @@ def main():
     )
     prof_role = 'Программист'
     city = 'Москва'
-    secret_key_sj = env.str('SJ_SECRET_KEY')
 
+    prof_role_id_hh = fetch_prof_role_id_hh(prof_role)
+    city_id_hh = fetch_city_id_hh(city)
     title = f'HeadHunter {city}'
-    salary_stat_hh = get_salary_stat_hh(prog_langs, prof_role, city)
+    salary_stat_hh = get_salary_stat_hh(prog_langs, prof_role_id_hh, city_id_hh)
     stat_table_hh = draw_table(salary_stat_hh, title)
     print(stat_table_hh)
 
     print()
 
+    secret_key_sj = env.str('SJ_SECRET_KEY')
     title = f'SuperJob {city}'
-    salary_stat_sj = get_salary_stat_sj(prog_langs, city, secret_key_sj)
+    city_id_sj = fetch_city_id_sj(city)
+    salary_stat_sj = get_salary_stat_sj(prog_langs, city_id_sj, secret_key_sj)
     stat_table_sj = draw_table(salary_stat_sj, title)
     print(stat_table_sj)
 
