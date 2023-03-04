@@ -4,10 +4,6 @@ from environs import Env
 from terminaltables import AsciiTable
 
 
-env = Env()
-env.read_env()
-
-
 def predict_rub_salary(salary_from, salary_to):
 
     if salary_from and salary_to:
@@ -209,6 +205,9 @@ def draw_table(vacancies_stat, title):
 
 
 def main():
+
+    env = Env()
+    env.read_env()
 
     prog_langs = (
         'JavaScript',
