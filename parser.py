@@ -192,19 +192,19 @@ def get_salary_stat_hh(prog_langs, prof_role_id, city_id):
 
 def draw_table(vacancies_stat, title):
 
-    TABLE_DATA = [
-        (
-            'Язык программирования',
-            'Вакансий найдено',
-            'Вакансий обработано',
-            'Средняя зарплата',
-        ),
-    ]
+    table_content = []
+    column_titles = (
+        'Язык программирования',
+        'Вакансий найдено',
+        'Вакансий обработано',
+        'Средняя зарплата',
+    )
+    table_content.append(column_titles)
 
     for prog_lang, salary_stat in vacancies_stat.items():
-        TABLE_DATA.append((prog_lang, *salary_stat.values()))
+        table_content.append((prog_lang, *salary_stat.values()))
 
-    table_instance = AsciiTable(TABLE_DATA, title)
+    table_instance = AsciiTable(table_content, title)
 
     return table_instance.table
 
